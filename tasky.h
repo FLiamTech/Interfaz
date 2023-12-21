@@ -28,6 +28,7 @@ private:
     void agregarTarea(Tarea *t);
     void limpiar();
     void guardar();
+    const QString ARCHIVO = "tareas.csv";
     QList<Tarea*> m_tareas;
     enum Columna
     {

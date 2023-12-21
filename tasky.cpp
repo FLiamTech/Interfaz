@@ -37,7 +37,10 @@ void Tasky::on_btnAgregar_clicked() /*para que aparezca se usa go to slot al bot
     /*Crea una tarea y Agrega una tarea a la lista*/
     Tarea *t = new Tarea(nombre, asignatura, fecha, hora);
     agregarTarea(t);
+    // Limpia el formulario
     limpiar();
+    // Guardar tareas
+    guardar();
 }
 
 void Tasky::agregarTarea(Tarea *t)
@@ -72,5 +75,30 @@ void Tasky::limpiar()
 
     //Setear el foco
     ui->editTarea->setFocus();
+}
+
+void Tasky::guardar()
+{
+    // Abrir el archivo y guardar
+    QFile archivo(ARCHIVO);
+    if (archivo.open(QFile::WriteOnly | QFile::Truncate))
+    {
+        QTextStream salida(&archivo);
+        Tarea *t;
+        foreach(t, m_tareas)
+        {
+            salida << t->nombre() << ";"<< t->asignatura() << ";";
+            salida << t->fecha().toString("dd/MM/yyyy") << ";";
+            salida << t->hora().toString("hh:mm") << "\n";
+        }
+
+        archivo.close();
+        //QMessageBox::information(this,"Guardar contactos","Contactos guardados con éxito");
+    }
+    else
+    {
+        QMessageBox::critical(this,"Guardar tareas", "No se puede escribir sobre " + ARCHIVO);
+    }
+
 }
 
