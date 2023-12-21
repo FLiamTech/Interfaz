@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QDebug>
+#include <QMessageBox>
+#include <QFile>
 
 #include <tarea.h>
 
@@ -23,7 +25,9 @@ private slots:
 
 private:
     Ui::Tasky *ui;
-
+    void agregarTarea(Tarea *t);
+    void limpiar();
+    void guardar();
     QList<Tarea*> m_tareas;
     enum Columna
     {
