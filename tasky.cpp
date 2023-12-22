@@ -6,15 +6,14 @@ Tasky::Tasky(QWidget *parent)
     , ui(new Ui::Tasky)
 {
     ui->setupUi(this); /*Todo lo que se crea en la interfaz */
-     // Limpiar el formulario
+        // Limpiar el formulario
     limpiar();
-
-
     /*Configurar la tabla*/
     ui->tblTareas->setColumnCount(4);
     QStringList cabecera;
     cabecera << "Tarea" << "Asignatura" << "Fecha" << "Hora";
     ui->tblTareas->setHorizontalHeaderLabels(cabecera);
+    cargar();
 }
 
 Tasky::~Tasky()
@@ -85,13 +84,14 @@ void Tasky::guardar()
     {
         QTextStream salida(&archivo);
         Tarea *t;
+
+
         foreach(t, m_tareas)
         {
             salida << t->nombre() << ";"<< t->asignatura() << ";";
             salida << t->fecha().toString("dd/MM/yyyy") << ";";
             salida << t->hora().toString("hh:mm") << "\n";
         }
-
         archivo.close();
         //QMessageBox::information(this,"Guardar contactos","Contactos guardados con éxito");
     }
@@ -102,3 +102,30 @@ void Tasky::guardar()
 
 }
 
+void Tasky::cargar()
+{
+    QFile archivo(ARCHIVO);
+    if (archivo.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QTextStream entrada(&archivo);
+
+        while (!entrada.atEnd())
+        {
+            QString linea = entrada.readLine();
+            QStringList datos = linea.split(";");
+            QString nombre = datos[0];
+            QString asignatura = datos[1];
+            QDate fecha = QDate::fromString(datos[2], "dd/MM/yyyy");
+            QTime hora = QTime::fromString(datos[3], "hh:mm");
+
+            Tarea *t = new Tarea(nombre, asignatura, fecha, hora);
+            m_tareas.append(t);
+        }
+
+        archivo.close();
+    }
+    else
+    {
+        QMessageBox::critical(this, "Cargar tareas", "No se puede leer desde " + ARCHIVO);
+    }
+}
