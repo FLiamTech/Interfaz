@@ -57,6 +57,20 @@ void Tasky::agregarTarea(Tarea *t)
     ui->tblTareas->setItem(fila, ASIGNATURA, new QTableWidgetItem(t->asignatura()));
     ui->tblTareas->setItem(fila, FECHA, new QTableWidgetItem(t->fecha().toString("dd/MM/yyyy")));
     ui->tblTareas->setItem(fila, HORA, new QTableWidgetItem(t->hora().toString("hh:mm")));
+
+    // Verificador para cambiar el color
+    if(colorTarea(t))
+    {
+        QColor colorFondo(255, 0, 0);
+        for (int i = 0; i < ui->tblTareas->columnCount(); ++i)
+        {
+            QTableWidgetItem *item = ui->tblTareas->item(fila, i);
+            if (item)
+            {
+                item->setBackground(colorFondo);
+            }
+        }
+    }
 }
 
 void Tasky::limpiar()
@@ -115,11 +129,16 @@ void Tasky::cargar()
             QStringList datos = linea.split(";");
             QString nombre = datos[0];
             QString asignatura = datos[1];
-            QDate fecha = QDate::fromString(datos[2], "dd/MM/yyyy");
-            QTime hora = QTime::fromString(datos[3], "hh:mm");
+            QStringList fecha = datos[2].split("/");
+            QDate f(fecha[2].toInt(), fecha[1].toInt(), fecha[0].toInt());
+            QStringList hora = datos[3].split(":");
+            QTime h(hora[0].toInt(), hora[1].toInt());
 
-            Tarea *t = new Tarea(nombre, asignatura, fecha, hora);
-            m_tareas.append(t);
+            //QDate fecha = QDate::fromString(datos[2], "dd/MM/yyyy");
+            //QTime hora = QTime::fromString(datos[3], "hh:mm");
+
+            Tarea *t = new Tarea(nombre, asignatura, f, h);
+            agregarTarea(t);
         }
 
         archivo.close();
@@ -128,4 +147,39 @@ void Tasky::cargar()
     {
         QMessageBox::critical(this, "Cargar tareas", "No se puede leer desde " + ARCHIVO);
     }
+}
+
+void Tasky::eliminar(int fila)
+{
+    if(fila >= 0 && fila < ui->tblTareas->rowCount())
+    {
+        // Elimina la tarea de la lista
+        Tarea *t = m_tareas.takeAt(fila);
+        delete t;
+
+        // Elimina la tarea de la tabla
+        ui->tblTareas->removeRow(fila);
+        guardar();
+    }
+}
+
+void Tasky::on_tblTareas_cellDoubleClicked(int row, int column)
+{
+    if(column == TAREA)
+    {
+        QMessageBox::StandardButton respuesta = QMessageBox::question(this, "Eliminar tarea", "Seguro que desea eliminar esta tarea?", QMessageBox::Yes | QMessageBox::No);
+        if (respuesta == QMessageBox::Yes)
+        {
+            eliminar(row);
+        }
+    }
+}
+
+bool Tasky::colorTarea(const Tarea *t)
+{
+    // Para la fecha actual
+    QDate fechaActual = QDate::currentDate();
+    // Para la fecha limite
+    QDate fechaLimite = t->fecha();
+    return (fechaLimite >= fechaActual && fechaLimite <= fechaActual.addDays(1));
 }

@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Tasky</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="resources.qrc">
+    <normaloff>:/Recursos/lista-de-quehaceres.png</normaloff>:/Recursos/lista-de-quehaceres.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
@@ -45,6 +49,10 @@
           </item>
           <item row="0" column="1">
            <widget class="QLineEdit" name="editTarea">
+            <property name="styleSheet">
+             <string notr="true">font: 700 italic 9pt &quot;Segoe UI&quot;;
+background-color: rgb(85, 255, 255);</string>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -110,7 +118,7 @@
               <second>0</second>
               <year>2023</year>
               <month>12</month>
-              <day>19</day>
+              <day>22</day>
              </datetime>
             </property>
             <property name="minimumDate">
@@ -125,6 +133,13 @@
             </property>
             <property name="calendarPopup">
              <bool>true</bool>
+            </property>
+            <property name="date">
+             <date>
+              <year>2023</year>
+              <month>12</month>
+              <day>22</day>
+             </date>
             </property>
            </widget>
           </item>
@@ -173,7 +188,7 @@
              <item row="0" column="1">
               <widget class="QPushButton" name="btnAgregar">
                <property name="text">
-                <string>Agregar</string>
+                <string>&amp;Agregar</string>
                </property>
               </widget>
              </item>
@@ -181,6 +196,15 @@
            </widget>
           </item>
          </layout>
+         <zorder>label</zorder>
+         <zorder>label_2</zorder>
+         <zorder>cmbAsignatura</zorder>
+         <zorder>label_3</zorder>
+         <zorder>dtFecha</zorder>
+         <zorder>label_4</zorder>
+         <zorder>dtHora</zorder>
+         <zorder>widget_2</zorder>
+         <zorder>editTarea</zorder>
         </widget>
        </item>
        <item>
@@ -190,7 +214,11 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
-           <widget class="QTableWidget" name="tblTareas"/>
+           <widget class="QTableWidget" name="tblTareas">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(203, 239, 255);</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -206,12 +234,14 @@
      <x>0</x>
      <y>0</y>
      <width>1023</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -23,12 +23,16 @@ public:
 private slots:
     void on_btnAgregar_clicked();
 
+    void on_tblTareas_cellDoubleClicked(int row, int column);
+
 private:
     Ui::Tasky *ui;
     void agregarTarea(Tarea *t);
     void limpiar();
     void guardar();
     void cargar();
+    bool colorTarea(const Tarea *t);
+    void eliminar(int fila);
     const QString ARCHIVO = "tareas.csv";
     QList<Tarea*> m_tareas;
     enum Columna
