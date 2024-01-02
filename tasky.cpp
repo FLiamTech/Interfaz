@@ -61,7 +61,7 @@ void Tasky::agregarTarea(Tarea *t)
     // Verificador para cambiar el color
     if(colorTarea(t))
     {
-        QColor colorFondo(255, 0, 0);
+        QColor colorFondo(255, 153, 153);
         for (int i = 0; i < ui->tblTareas->columnCount(); ++i)
         {
             QTableWidgetItem *item = ui->tblTareas->item(fila, i);
